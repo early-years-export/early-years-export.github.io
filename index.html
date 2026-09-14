@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EYLog Observation Exporter</title>
+    <style>
+        :root {
+            /* School Colors */
+            --primary-blue: #0033a0;
+            --accent-yellow: #ffcc00;
+            --text-dark: #2c3e50;
+            --bg-light: #f4f7f9;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 0; }
+        header { background-color: var(--primary-blue); color: white; text-align: center; padding: 2.5rem 1rem; border-bottom: 6px solid var(--accent-yellow); }
+        header h1 { margin: 0; font-size: 2.2rem; }
+        header p { margin: 10px 0 0; font-size: 1.1rem; opacity: 0.9; }
+        .container { max-width: 800px; margin: 3rem auto; background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .alert { background-color: #fff8e1; border-left: 5px solid var(--accent-yellow); padding: 15px 20px; margin-bottom: 2rem; border-radius: 0 8px 8px 0; font-size: 0.95rem; }
+        .button-container { text-align: center; margin: 3rem 0; padding: 2rem; background: #f8f9fa; border: 2px dashed #ccc; border-radius: 12px; }
+        
+        .bookmarklet { display: inline-block; background-color: var(--accent-yellow); color: var(--primary-blue); font-size: 1.25rem; font-weight: bold; text-decoration: none; padding: 15px 35px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: grab; transition: transform 0.2s, box-shadow 0.2s; border: 2px solid var(--primary-blue); }
+        .bookmarklet:active { cursor: grabbing; }
+        .bookmarklet:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        
+        .instructions { margin-top: 2rem; }
+        .step { display: flex; margin-bottom: 1.5rem; align-items: flex-start; }
+        .step-number { background-color: var(--primary-blue); color: white; min-width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; margin-right: 20px; margin-top: 3px; }
+        .step-content h3 { margin: 0 0 5px 0; color: var(--primary-blue); }
+        .step-content p { margin: 0; color: #555; }
+        footer { text-align: center; margin-top: 3rem; padding: 2rem; color: #666; font-size: 0.85rem; }
+
+        @media (max-width: 600px) { .container { margin: 1rem; padding: 1.5rem; } .step { flex-direction: column; } .step-number { margin-bottom: 10px; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>EYLog Observation Exporter</h1>
+        <p>Safely download your child's learning journey, photos, and videos.</p>
+    </header>
+
+    <div class="container">
+        <div class="alert">
+            <strong>Note:</strong> This tool requires a desktop computer and a modern browser (Google Chrome, Microsoft Edge, or Brave). It will not work on mobile phones or Safari due to how it saves large files directly to your hard drive.
+        </div>
+
+        <div class="instructions">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Show your Bookmarks Bar</h3>
+                    <p>If you can't see your bookmarks bar under the web address at the top of your screen, press <strong>Ctrl + Shift + B</strong> (Windows) or <strong>Cmd + Shift + B</strong> (Mac) to show it.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Drag the button to your Bookmarks</h3>
+                    <p>Click and hold the yellow button below, drag it up to your bookmarks bar, and let go. It will create a new bookmark called "EYLog Exporter".</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <!-- 
+                 CHANGE THE URL BELOW 
+                 Replace 'https://YOUR_WEBSITE_URL_HERE/eylog-exporter.js' with the real URL where you host the JS file.
+            -->
+            <a class="bookmarklet" href="javascript:(function(){var s=document.createElement('script');s.src='https://YOUR_WEBSITE_URL_HERE/eylog-exporter.js?v='+Date.now();document.body.appendChild(s);})();" onclick="event.preventDefault(); alert('Drag this button to your bookmarks bar! Clicking it here won\'t work.');">
+                &#8618; EYLog Exporter
+            </a>
+            <p style="margin-top: 15px; font-size: 0.9rem; color: #777;"><em>(Drag me to your bookmarks bar!)</em></p>
+        </div>
+
+        <div class="instructions">
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Run the Exporter</h3>
+                    <p>Go to your <a href="https://parentportal.eylog.co.uk/" target="_blank" style="color: var(--primary-blue);">EYLog Parent Portal</a> and log in. Once you are on the dashboard, click the "EYLog Exporter" bookmark you just created.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Save your file</h3>
+                    <p>A popup box will appear in the top right. Select which child you want to export using the dropdown, and click <strong>Start Export</strong>. It will ask where you want to save the ZIP file on your computer. Pick a folder, click Save, and watch the progress box in the top right corner.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Privacy Note:</strong> This script runs entirely within your own web browser. It does not send your data, passwords, or photos to any third-party servers.</p>
+    </footer>
+
+</body>
+</html>
