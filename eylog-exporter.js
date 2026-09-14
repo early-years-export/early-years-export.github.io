@@ -2,7 +2,7 @@
     // 1. Create the UI Overlay
     const ui = document.createElement('div');
     Object.assign(ui.style, {
-        position: 'fixed', top: '20px', right: '20px', width: '300px',
+        position: 'fixed', top: '20px', right: '20px', width: '400px',
         padding: '15px', background: '#333', color: '#fff',
         zIndex: '999999', borderRadius: '8px', fontFamily: 'sans-serif',
         boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
