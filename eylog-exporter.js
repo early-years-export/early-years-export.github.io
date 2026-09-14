@@ -48,7 +48,7 @@
             ${optionsHTML}
         </select>
         <button id="eylog-start-btn" style="width:100%; padding:8px; background:#ffcc00; color:#0033a0; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Start Export</button>
-        <div id="eylog-status" style="margin-top:10px; font-size:0.9em;">Ready.</div>
+        <div id="eylog-status" style="margin-top:10px; font-size:0.9em;"></div>
     `;
     
     document.body.appendChild(ui);
