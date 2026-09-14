@@ -142,7 +142,20 @@
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
-                    let apiResponse = await res.json();
+                    // Instead of parsing immediately, get raw text so we can save it to the zip
+                    let rawJson = await res.text();
+                    
+                    log(`Saving JSON for page ${currentPage}...`);
+                    await zipWriter.add(`cache/page_${currentPage}.json`, new zip.TextReader(rawJson));
+
+                    let apiResponse = null;
+                    try {
+                        apiResponse = JSON.parse(rawJson);
+                    } catch (e) {
+                        log(`Failed to parse JSON for page ${currentPage}`);
+                        break;
+                    }
+
                     if (!apiResponse?.data?.timeline) break;
                     
                     lastPage = apiResponse.data.pagination.lastPage;
@@ -180,7 +193,6 @@
 
                                 // Render the updated media items with overlays
                                 if (isVideo) {
-                                    // #t=0.1 trick forces the browser to load the first frame of the video as a thumbnail
                                     html += `<div class="media-item" onclick="openLightbox('${relativePath}', true)">
                                                 <video src="${relativePath}#t=0.1" preload="metadata" muted></video>
                                                 <div class="video-overlay"></div>
