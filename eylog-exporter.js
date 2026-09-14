@@ -88,7 +88,7 @@
                 const writable = await handle.createWritable();
                 const zipWriter = new zip.ZipWriter(writable);
 
-                // Base HTML string
+                // Base HTML string with updated CSS for video overlays
                 let html = `<!DOCTYPE html>
                 <html>
                 <head>
@@ -99,10 +99,30 @@
                         .masonry { column-count: 1; column-gap: 1em; max-width:800px; margin: 0 auto; }
                         .obs { background:#fff; padding:15px; margin-bottom:1em; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
                         .meta { font-size: 0.85em; color: #666; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+                        
+                        /* Media Grid Layout */
                         .media-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-                        .media-grid img, .media-grid video { height: 240px; width: auto; object-fit: cover; border-radius: 4px; cursor: pointer;}
+                        .media-item { position: relative; height: 240px; cursor: pointer; border-radius: 4px; overflow: hidden; }
+                        .media-item img, .media-item video { height: 100%; width: auto; object-fit: cover; display: block; transition: transform 0.3s; }
+                        .media-item:hover img, .media-item:hover video { transform: scale(1.05); }
+                        
+                        /* Video Play Button Overlay */
+                        .video-overlay {
+                            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                            width: 50px; height: 50px; background: rgba(0,0,0,0.6); border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center; pointer-events: none;
+                            border: 3px solid rgba(255,255,255,0.8);
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                        }
+                        .video-overlay::after {
+                            content: ''; display: block; border-style: solid; border-width: 10px 0 10px 16px;
+                            border-color: transparent transparent transparent #fff; margin-left: 5px;
+                        }
+
                         h4 { margin-bottom:2px; } 
                         p { margin-top:2px; white-space: pre-wrap; }
+                        
+                        /* Lightbox */
                         #lightbox { display: none; position: fixed; z-index: 999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
                         #lightbox-content { max-width: 90vw; max-height: 90vh; display: flex; align-items: center; justify-content: center;}
                         #lightbox-content img, #lightbox-content video { max-width: 100%; max-height: 90vh; }
@@ -155,14 +175,20 @@
 
                                 log(`Streaming ${fileName}...`);
                                 
-                                // Fetch media WITHOUT the Bearer token to avoid CloudFront CORS blocks
                                 let mediaRes = await fetch(media.url);
                                 await zipWriter.add(relativePath, mediaRes.body);
 
+                                // Render the updated media items with overlays
                                 if (isVideo) {
-                                    html += `<video src="${relativePath}" onclick="openLightbox('${relativePath}', true)" muted loop></video>`;
+                                    // #t=0.1 trick forces the browser to load the first frame of the video as a thumbnail
+                                    html += `<div class="media-item" onclick="openLightbox('${relativePath}', true)">
+                                                <video src="${relativePath}#t=0.1" preload="metadata" muted></video>
+                                                <div class="video-overlay"></div>
+                                             </div>`;
                                 } else {
-                                    html += `<img src="${relativePath}" onclick="openLightbox('${relativePath}', false)" />`;
+                                    html += `<div class="media-item" onclick="openLightbox('${relativePath}', false)">
+                                                <img src="${relativePath}" />
+                                             </div>`;
                                 }
                             }
                             html += `</div>`;
